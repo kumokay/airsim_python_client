@@ -1,6 +1,7 @@
 ### user defined ###
 screenshot/*
-airsim_exes/*/*
+airsim_exes/*
+!airsim_exes/*/settings.json
 
 
 # Created by https://www.gitignore.io/api/python
