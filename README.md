@@ -1,3 +1,5 @@
+This is based on Airsim v1.2.0
+
 # Python API for AirSim
 
 This package contains Python APIs for [AirSim](https://github.com/microsoft/airsim).
