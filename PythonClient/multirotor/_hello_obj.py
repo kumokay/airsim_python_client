@@ -46,7 +46,7 @@ camera_dict = {}
 
 for i in range(0, 4):
 	drone_name = 'Drone{}'.format(i)
-	camera_dict[drone_name] = screenshotHelper(drone_name, client, 'D:\\my_projects\\airsim_python_client\\airsim_exes\\CityEnviron\\screenshot\\')
+	camera_dict[drone_name] = screenshotHelper(drone_name, client, 'C:\\NESLProjects\\airsim_python_client\\airsim_exes\\CityEnviron\\screenshot\\')
 
 	client.enableApiControl(True, vehicle_name=drone_name)
 	client.armDisarm(True, vehicle_name=drone_name)
