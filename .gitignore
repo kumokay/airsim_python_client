@@ -1,9 +1,13 @@
 ### user defined ###
-!airsim_exes/*/settings.json
-!airsim_exes/*/run.json
-!airsim_exes/*/screenshot/*
 screenshot/*
-airsim_exes/*
+airsim_exes/*/*/*
+airsim_exes/*/*.exe
+airsim_exes/*/Manifest*
+!airsim_exes/*/settings.json
+!airsim_exes/*/run.bat
+!airsim_exes/*/screenshot/*
+
+
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python

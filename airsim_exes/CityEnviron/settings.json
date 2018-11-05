@@ -1,0 +1,43 @@
+{
+	"SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/master/docs/settings.md",
+	"SettingsVersion": 1.2,
+	"SimMode": "Multirotor",
+	"ClockSpeed": 1,
+	"CameraDefaults": {
+	    "CaptureSettings": [
+			{
+				"ImageType": 0,
+				"Width": 512,
+				"Height": 288,
+				"FOV_Degrees": 90,
+				"AutoExposureSpeed": 100,
+				"AutoExposureBias": 0,
+				"AutoExposureMaxBrightness": 0.64,
+				"AutoExposureMinBrightness": 0.03,
+				"MotionBlurAmount": 0,
+				"TargetGamma": 2.5,
+				"ProjectionMode": "",
+				"OrthoWidth": 5.12
+			}
+		]
+    },
+	"Vehicles": {
+		"Drone0": {
+		  "VehicleType": "SimpleFlight",
+		  "X": 480, "Y": 450, "Z": -15, "YAW": 0
+		},
+		"Drone1": {
+		  "VehicleType": "SimpleFlight",
+		  "X": 506, "Y": 465, "Z": -15, "YAW": 0
+		},
+		"Drone2": {
+		  "VehicleType": "SimpleFlight",
+		  "X": 506, "Y": 501, "Z": -15, "YAW": 0
+		},
+		"Drone3": {
+		  "VehicleType": "SimpleFlight",
+		  "X": 480, "Y": 516, "Z": -15, "YAW": 0
+		}
+    }
+}
+
