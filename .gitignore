@@ -3,7 +3,7 @@ screenshot/*
 airsim_exes/*/*/*
 airsim_exes/*/*.exe
 airsim_exes/*/Manifest*
-airsim_exes/*/screenshot/*
+!airsim_exes/*/screenshot/*
 !airsim_exes/*/settings.json
 !airsim_exes/*/run.bat
 
