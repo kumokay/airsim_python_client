@@ -5,7 +5,7 @@ airsim_exes/*/*.exe
 airsim_exes/*/Manifest*
 !airsim_exes/*/settings.json
 !airsim_exes/*/run.bat
-!airsim_exes/*/screenshot/*
+# !airsim_exes/*/screenshot/*
 
 
 
@@ -15,7 +15,9 @@ airsim_exes/*/Manifest*
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
+*.pyd
 *$py.class
 
 # C extensions

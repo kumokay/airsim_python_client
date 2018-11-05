@@ -1,0 +1,22 @@
+{
+  "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/master/docs/settings.md",
+  "SettingsVersion": 1.2,
+  "SimMode": "Multirotor",
+  "ViewMode": "SpringArmChase",
+  "Vehicles": {
+    "Drone1": {
+      "VehicleType": "SimpleFlight",
+      "EnableCollisionPassthrogh": false,
+      "EnableCollisions": true,
+      "X": 30, "Y": -19.5, "Z": -2,
+      "Yaw": 0
+    },
+    "Drone2": {
+      "VehicleType": "SimpleFlight",
+      "EnableCollisionPassthrogh": true,
+      "EnableCollisions": false,
+      "X": 0, "Y": -18, "Z": -2,
+      "Yaw": 0
+    }
+  }
+}
