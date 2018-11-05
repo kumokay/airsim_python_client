@@ -2,7 +2,8 @@
 screenshot/*
 airsim_exes/*
 !airsim_exes/*/settings.json
-
+!airsim_exes/*/run.json
+!airsim_exes/*/screenshot/*
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python
