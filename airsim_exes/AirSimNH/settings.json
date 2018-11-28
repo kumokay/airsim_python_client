@@ -10,13 +10,6 @@
       "EnableCollisions": true,
       "X": 30, "Y": -19.5, "Z": -2,
       "Yaw": 0
-    },
-    "Drone2": {
-      "VehicleType": "SimpleFlight",
-      "EnableCollisionPassthrogh": true,
-      "EnableCollisions": false,
-      "X": 0, "Y": -18, "Z": -2,
-      "Yaw": 0
     }
   }
 }

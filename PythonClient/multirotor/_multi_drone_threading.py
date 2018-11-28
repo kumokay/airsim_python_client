@@ -5,6 +5,7 @@ import numpy as np
 import os
 import tempfile
 import pprint
+import sys
 
 import msgpackrpc
 import time
@@ -12,14 +13,15 @@ import base64
 import threading
 from msgpackrpc.error import RPCError
 
+MININET_MACHINE_IP = None
+MININET_MACHINE_PORT = None
 
 image_folder = 'C:\\NESLProjects\\airsim_v1.2.0\\screenshot'
 image_id = {
     'Drone1': 1,
-    'Drone2': 1,
 }
 
-def take_picture(drone_name, is_save=True):
+def take_picture(drone_name, is_save=False):
     responses = client.simGetImages([
         airsim.ImageRequest("front_center", airsim.ImageType.Scene),
         # airsim.ImageRequest("bottom_center", airsim.ImageType.Scene),
@@ -83,48 +85,20 @@ def move_to_pos(drone_name, x, y, z, yaw, speed):
     cur_pos = get_cur_pos(vehicle_name=drone_name)
     print(cur_pos)
 
-# connect to the AirSim simulator
-client = airsim.MultirotorClient()
-client.confirmConnection()
-client.enableApiControl(True, "Drone1")
-client.enableApiControl(True, "Drone2")
-client.armDisarm(True, "Drone1")
-client.armDisarm(True, "Drone2")
-
-f1 = client.takeoffAsync(vehicle_name="Drone1")
-f2 = client.takeoffAsync(vehicle_name="Drone2")
-f1.join()
-f2.join()
-
-state1 = client.getMultirotorState(vehicle_name="Drone1")
-s = pprint.pformat(state1)
-print("state: %s" % s)
-state2 = client.getMultirotorState(vehicle_name="Drone2")
-s = pprint.pformat(state2)
-print("state: %s" % s)
-
-
-airsim.wait_key('Press any key to start workers')
-is_car_found = threading.Event()
-is_follow = threading.Event()
-is_stop = threading.Event()
 
 class rpcServer(object):
     def push(self, result, timestamp):
         print("recv result={}; sender_time={}".format(result, timestamp))
         if 'car' in result:
             is_car_found.set()
-            is_follow.set()
 
     def stop(self, result, timestamp):
         print('stop simulation')
         is_stop.set()
 
-server = msgpackrpc.Server(rpcServer())
-
 
 def actuator(server):
-    server.listen(msgpackrpc.Address("172.17.15.21", 18800))
+    server.listen(msgpackrpc.Address(MININET_MACHINE_IP, int(MININET_MACHINE_PORT)))
     server.start()
     server.close()
 
@@ -167,7 +141,7 @@ def control_drone1_pic(is_stop):
             print('RuntimeError but it is okay: {}'.format(err))
         if responses:
             try:
-                send_image_async(responses[0].image_data_uint8, '172.17.20.12', 18800)
+                send_image_async(responses[0].image_data_uint8, MININET_MACHINE_IP, int(MININET_MACHINE_PORT))
             except RPCError as err:
                 print('RPCError but it is okay: {}'.format(err))
             except Exception as exp:
@@ -177,50 +151,59 @@ def control_drone1_pic(is_stop):
             if is_stop.isSet():
                 break
 
-def control_drone2(is_follow):
-    while 1:
-        if is_follow.isSet():
-            next_pos = get_cur_pos(vehicle_name='Drone1')
-            rc = move_to_pos('Drone2', next_pos.x_val, next_pos.y_val, next_pos.z_val-1, 0, 10)
-            responses = take_picture('Drone2')
-            next_pos = get_cur_pos(vehicle_name='Drone1')
-            rc = move_to_pos('Drone2', next_pos.x_val+10, next_pos.y_val, next_pos.z_val-1, 0, 1)
-            responses = take_picture('Drone2')
-            break
-        else:
-            time.sleep(1)
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print(
+            'usage: python {} MININET_MACHINE_IP:MININET_MACHINE_PORT. \n'
+            'e.g. 172.17.20.12:18800'.format(sys.argv[0]))
+        exit(0)
+    print('{} running at in the virtual world'.format(sys.argv[0], sys.argv[1]))
+    MININET_MACHINE_IP, MININET_MACHINE_PORT = sys.argv[1].split(':')
 
 
-worker0 = threading.Thread(
-    target=actuator, args=(server,), name='actuator')
-worker1 = threading.Thread(
-    target=control_drone1_move, args=(is_stop,), name='control_drone1_move')
-worker2 = threading.Thread(
-    target=control_drone1_pic, args=(is_stop,), name='control_drone1_pic')
-worker3 = threading.Thread(
-    target=control_drone2, args=(is_follow,), name='control_drone2')
+    # connect to the AirSim simulator
+    client = airsim.MultirotorClient()
+    client.confirmConnection()
+    client.enableApiControl(True, "Drone1")
+    client.armDisarm(True, "Drone1")
 
-print('Start worker threads')
-worker0.start()
-worker1.start()
-worker2.start()
-worker3.start()
+    f1 = client.takeoffAsync(vehicle_name="Drone1")
+    f1.join()
 
-print('Waiting for worker threads')
-worker2.join()
-worker3.join()
-server.stop()
-worker1.join()
-worker0.join()
+    state1 = client.getMultirotorState(vehicle_name="Drone1")
+    s = pprint.pformat(state1)
+    print("state: %s" % s)
 
 
+    airsim.wait_key('Press any key to start workers')
+    is_car_found = threading.Event()
+    is_stop = threading.Event()
+
+    server = msgpackrpc.Server(rpcServer())
+
+    worker0 = threading.Thread(
+        target=actuator, args=(server,), name='actuator')
+    worker1 = threading.Thread(
+        target=control_drone1_move, args=(is_stop,), name='control_drone1_move')
+    worker2 = threading.Thread(
+        target=control_drone1_pic, args=(is_stop,), name='control_drone1_pic')
 
 
-airsim.wait_key('Press any key to reset to original state')
-client.armDisarm(False, "Drone1")
-client.armDisarm(False, "Drone2")
-client.reset()
+    print('Start worker threads')
+    worker0.start()
+    worker1.start()
+    worker2.start()
 
-# that's enough fun for now. let's quit cleanly
-client.enableApiControl(False, "Drone1")
-client.enableApiControl(False, "Drone2")
+    print('Waiting for worker threads')
+    worker2.join()
+    server.stop()
+    worker1.join()
+    worker0.join()
+
+    airsim.wait_key('Press any key to reset to original state')
+    client.armDisarm(False, "Drone1")
+    client.reset()
+
+    # that's enough fun for now. let's quit cleanly
+    client.enableApiControl(False, "Drone1")
