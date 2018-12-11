@@ -24,19 +24,19 @@
 	"Vehicles": {
 		"Drone0": {
 		  "VehicleType": "SimpleFlight",
-		  "X": 480, "Y": 450, "Z": -15, "YAW": 0
+		  "X": 470, "Y": 200, "Z": -15, "YAW": 0
 		},
 		"Drone1": {
 		  "VehicleType": "SimpleFlight",
-		  "X": 506, "Y": 465, "Z": -15, "YAW": 0
+		  "X": 470, "Y": 225, "Z": -15, "YAW": 0
 		},
 		"Drone2": {
 		  "VehicleType": "SimpleFlight",
-		  "X": 506, "Y": 501, "Z": -15, "YAW": 0
+		  "X": 470, "Y": 250, "Z": -15, "YAW": 0
 		},
 		"Drone3": {
 		  "VehicleType": "SimpleFlight",
-		  "X": 480, "Y": 516, "Z": -15, "YAW": 0
+		  "X": 470, "Y": 275, "Z": -15, "YAW": 0
 		}
     }
 }
