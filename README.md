@@ -1,4 +1,4 @@
-This is based on Airsim v1.2.0
+This is a dev branch based on Airsim v1.2.0
 
 # Python API for AirSim
 
